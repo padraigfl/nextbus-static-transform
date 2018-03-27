@@ -1,3 +1,5 @@
+'use strict';
+
 /* This operation can be called directly, not dependencies */
 
 var axios = require("axios");
@@ -5,10 +7,8 @@ var sleep = require("sleep");
 
 var writeJSON = require("./jsonIO.js").writeJSON;
 
-var dir = "output/";
-var schedulesDir = dir + "schedules/";
-var routesDir = dir + "routeData/";
-var agency = "sf-muni";
+var agent = "sf-muni";
+var dir = 'output'
 var schedule = false;
 var routes = false;
 
@@ -27,9 +27,27 @@ try {
 
 var API_URL = `http://webservices.nextbus.com/service/publicJSONFeed?a=${agency}`;
 
-function getRoutes(expanded, schedule) {
-  expanded = expanded !== undefined ? expanded : false;
-  schedule = schedule !== undefined ? schedule : false;
+function getExpandedRoute (route) {
+  axios.get(API_URL, { params: { command: "routeConfig", r: route } })
+    .then( function(response) {
+      writeJSON(`${dir}/route--${route}.json`, response.data);
+      console.log(response.data);
+    })
+    .catch( function(err) { console.log(err); } );
+};
+
+function getRouteSchedules(route) {
+  axios.get(API_URL, { params: { command: "schedule", r: route } })
+    .then( function (response) {
+      writeJSON(`${dir}/schedule--${route}.json`, response.data);
+    })
+    .catch( function(err) { console.log(err); });
+};
+
+function getRoutes(agency, expanded, schedule, dir) {
+  if (!dir) {
+    dir = '.';
+  }
   var result;
   result = axios.get(API_URL, { params: { command: "routeList" } })
     .then( function(response) {
@@ -39,9 +57,6 @@ function getRoutes(expanded, schedule) {
         console.log(
           `Processing ${counter} of ${response.data.route.length}: ${tag}`
         );
-        // if there are issues with sleep, use the below instead
-        // let waitTill = new Date(new Date().getTime() + 1500)
-        // while(waitTill > new Date()){}
         if (expanded) {
           sleep.sleep(1);
           getExpandedRoute(tag);
@@ -51,7 +66,7 @@ function getRoutes(expanded, schedule) {
         }
         counter += 1;
       });
-      writeJSON(`${route}routeIndex.json`, response.data);
+      writeJSON(`${dir}/routes-_index.json`, response.data);
     })
     .catch(err => {
       console.log("========ERROR======");
@@ -60,21 +75,4 @@ function getRoutes(expanded, schedule) {
   return result;
 };
 
-function getExpandedRoute (route) {
-  axios.get(API_URL, { params: { command: "routeConfig", r: route } })
-    .then( function(response) {
-      writeJSON(`${routesDir}${route}.json`, response.data);
-      console.log(response.data);
-    })
-    .catch( function(err) { console.log(err); } );
-};
-
-function getRouteSchedules(route) {
-  axios.get(API_URL, { params: { command: "schedule", r: route } })
-    .then( function (response) {
-      writeJSON(`${schedulesDir}${route}.json`, response.data);
-    })
-    .catch( function(err) { console.log(err); });
-};
-
-getRoutes(routes, schedule);
+getRoutes(agent, routes, schedule, dir);
