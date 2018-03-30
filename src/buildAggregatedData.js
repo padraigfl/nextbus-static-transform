@@ -43,6 +43,7 @@ function getRouteStopPoints(routeData, routeAggregator, stopAggregator, writeDir
       oppositeColor: routeData.route.oppositeColor,
       max: parseCoordinates([routeData.route.latMax, routeData.route.lonMax]),
       min: parseCoordinates([routeData.route.latMin, routeData.route.lonMin]),
+      // // TODO: reapply elsewhere with a more useful format
       // scheduleStops: {
       //   inbound: routeSchedule.route[0] ? returnTagValues(routeSchedule.route[0].header.stop) : undefined,
       //   outbound: routeSchedule.route[1] ? returnTagValues(routeSchedule.route[1].header.stop) : undefined
