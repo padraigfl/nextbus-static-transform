@@ -8,7 +8,7 @@ function apiReq(attrs, onFetched) {
 
   var request = fetch('http://webservices.nextbus.com/service/publicJSONFeed'+queryString)
     .then(function(res) {
-      return res.text();
+      return res.json();
     });
 
   if (!onFetched) {
@@ -31,7 +31,7 @@ function getRouteSchedule(agency, route, onFetched) {
 }
 
 module.exports = {
-  getRouteTags: getRoutesTags,
+  getRoutesTags: getRoutesTags,
   getRoute: getRoute,
   getRouteSchedule: getRouteSchedule,
 };
