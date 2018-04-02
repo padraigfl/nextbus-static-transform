@@ -2,65 +2,59 @@
   - apiCalls to be called for Route Paths
   - apiCalls and buildStopData for Stop Points  */
 
-var io = require("./jsonIO.js");
-var readJSON = io.readJSON;
-var writeJSON = io.writeJSON;
+function buildStopPoint(stop) {
+  return {
+    type: 'Feature',
+    properties: {
+      title: stop.title,
+      tag: stop.tag,
+      stopId: stop.stopId,
+    },
+    geometry: {
+      type: 'Point',
+      coordinates: [parseFloat(stop.lon), parseFloat(stop.lat)],
+    }
+  };
+}
 
-function buildStopPoints(stopData, outputLocation) {
-  var stopPoints = { type: "FeatureCollection", features: [] };
+function buildStopPoints(stopData, geoObj) {
+  if (!geoObj) {
+    geoObj = { type: 'FeatureCollection', features: [] };
+  }
 
-  stopData.forEach(function(stop) {
-    stopPoints.features.push({
-      type: "Feature",
-      properties: {
-        title: stop.title
-      },
-      geometry: {
-        type: "Point",
-        coordinates: [parseFloat(stop.lon), parseFloat(stop.lat)]
-      }
-    })
+  Object.keys(stopData).forEach(function(id) {
+    geoObj.features.push(buildStopPoint(stopData[id]));
   });
 
-  writeJSON(outputLocation, stopPoints);
-};
+  return geoObj;
+}
 
 function getLineStrings(routePath) {
-  return routePath.map(points => {
-    var geoPath = points.point.map(function(point) {
+  return routePath.map(function (points) {
+    var geoPath = points.point.map(function (point) {
       return [parseFloat(point.lon), parseFloat(point.lat)];
     });
     return geoPath;
   });
-};
+}
 
 function buildRoute(route) {
   return {
-    type: "Feature",
+    type: 'Feature',
     properties: {
       title: route.route.title,
       tag: route.route.tag,
-      color: route.route.color
+      color: route.route.color,
     },
     geometry: {
-      type: "MultiLineString",
-      coordinates: getLineStrings(route.route.path)
+      type: 'MultiLineString',
+      coordinates: getLineStrings(route.route.path),
     }
-  }
+  };
 }
 
-function buildRoutes(routes, directory) {
-  var routePaths = { type: "FeatureCollection", features: [] };
-  routes.map(function(route) {
-    // TODO: replace with API req
-    var routeJson = readJSON(`output/routeData/${route}.json`);
-    routePaths.features.push(buildRoute(routeJson));
-  });
-  writeJSON(director, routePaths);
+module.exports = {
+  buildStopPoint: buildStopPoint,
+  buildStopPoints: buildStopPoints,
+  buildRoute: buildRoute,
 };
-
-var aggregatedStops = readJSON(`${dir}aggregatedData/stops.json`);
-var routesJson = readJSON(`${directory}routeData/index.json`);
-
-buildRoutes(routesJson.route.map(route=>route.tag), 'output/geoJSONs/routePaths.geojson');
-buildStopPoints(aggregatedStops, 'output/geoJSONS/stops.geojson');
