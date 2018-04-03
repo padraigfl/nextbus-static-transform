@@ -51,7 +51,7 @@ api.getRoutesTags('sf-muni')
 // var results = rTags.reduce(function(acc, tag) {
 //   console.log(tag);
 //   var routeJson = readJSON(routeDataDir+'/'+tag+'.json', 'utf8');//todo, export logic
-//   return minifyRoutes(routeJson, acc.routes, acc.stops, routeDataDir);
+//   return minifyRoutes(routeJson, acc.routes, acc.stops);
 // }, { stops: {}, routes: {}});
 // writeJSON(aggregatedDir+'/stops.json', results.stops);
 // writeJSON(aggregatedDir+'/routes.json', results.routes);
@@ -79,5 +79,12 @@ api.getRoutesTags('sf-muni')
 //     }
 //   )
 // ));
-// writeJSON(dir+'/geoJSONS/stops.json', geo.buildStopPoints(aggregatedStops));
+// writeJSON(
+//   dir+'/geoJSONS/stops.json',
+//   geo.buildFeaturesShell().features.push(
+//     Object.keys(aggregatedStops).map(function(stopKey) {
+//       return geo.buildStopPoint(aggregatedStops[stopKey]);
+//     })
+//   ),
+// );
 

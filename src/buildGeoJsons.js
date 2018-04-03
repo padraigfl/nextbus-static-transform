@@ -17,18 +17,6 @@ function buildStopPoint(stop) {
   };
 }
 
-function buildStopPoints(stopData, geoObj) {
-  if (!geoObj) {
-    geoObj = { type: 'FeatureCollection', features: [] };
-  }
-
-  Object.keys(stopData).forEach(function(id) {
-    geoObj.features.push(buildStopPoint(stopData[id]));
-  });
-
-  return geoObj;
-}
-
 function getLineStrings(routePath) {
   return routePath.map(function (points) {
     var geoPath = points.point.map(function (point) {
@@ -53,8 +41,11 @@ function buildRoute(route) {
   };
 }
 
+function buildFeaturesShell() {
+  return { type: 'FeatureCollection', features: [] };
+}
 module.exports = {
   buildStopPoint: buildStopPoint,
-  buildStopPoints: buildStopPoints,
   buildRoute: buildRoute,
+  buildFeaturesShell: buildFeaturesShell,
 };

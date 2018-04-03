@@ -22,9 +22,15 @@ function addNewStops(routeStops, aggregator) {
 };
 
 
-function minifyRouteStopData(routeData, routeAggregator, stopAggregator, writeDir) {
+function minifyRouteStopData(routeData, routeAggregator, stopAggregator) {
+  if(!routeAggregator) {
+    routeAggregator = {};
+  }
+  if(!stopAggregator) {
+    stopAggregator = {};
+  }
   try {
-    stopAggregator = addNewStops(routeData.route.stop, stopAggregator, writeDir);
+    stopAggregator = addNewStops(routeData.route.stop, stopAggregator);
     routeAggregator[routeData.route.tag] = {
       title: routeData.route.title,
       color: routeData.route.color,
