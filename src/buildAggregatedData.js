@@ -59,6 +59,33 @@ function addCopyright(routes, stops, copyright) {
   }
 }
 
+function addScheduleData(routeData, scheduleData, routeAggregator, stopAggregator) {
+  routeAggregator.stops = { // stops that are scheduled
+    inbound: routeData.route.direction[0] ?
+      routeData.route.direction[0].stop.map(function(stop) { return stop.tag; }) : undefined,
+    outbound: routeData.route.direction[1] ?
+      routeData.route.direction[1].stop.map(function(stop) { return stop.tag; }) : undefined,
+  };
+  if(!stopAggregator.routes) {
+    stopAggregator.routes = {
+      inbound: { wkd: {}, sat: {}, sun: {}},
+      outbound: { wkd: {}, sat: {}, sun: {}},
+    };
+  }
+  scheduleData.route.forEach(function(day) {
+    day.header.stop.forEach(function(stop, idx) { // add list of routes to stop
+      stopAggregator[stop.tag]
+        .routes[scheduleData.route][day.direction][day.serviceClass] = day.tr.stop.map(function(times) {
+          return times[idx];
+        });
+    });
+  });
+  return {
+    routes: routeAggregator,
+    stops: stopAggregator,
+  };
+}
+
 function minifyRouteStopData(routeData, routeAggregator, stopAggregator) {
   if(!routeAggregator) {
     routeAggregator = { data: {} };
@@ -92,5 +119,7 @@ function minifyRouteStopData(routeData, routeAggregator, stopAggregator) {
     stops: stopAggregator,
   };
 }
+
+minifyRouteStopData.addScheduleData = addScheduleData;
 
 module.exports = minifyRouteStopData;
