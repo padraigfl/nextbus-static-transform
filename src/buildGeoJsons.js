@@ -1,6 +1,9 @@
 /* This operation can be requires:
   - apiCalls to be called for Route Paths
   - apiCalls and buildStopData for Stop Points  */
+'use strict';
+
+var forceArray = require('./utils/forceArray');
 
 function buildStopPoint(stop) {
   return {
@@ -18,7 +21,9 @@ function buildStopPoint(stop) {
 }
 
 function getLineStrings(routePath) {
+  routePath = forceArray(routePath);
   return routePath.map(function (points) {
+    points = forceArray(points);
     var geoPath = points.point.map(function (point) {
       return [parseFloat(point.lon), parseFloat(point.lat)];
     });
@@ -44,6 +49,7 @@ function buildRoute(route) {
 function buildFeaturesShell() {
   return { type: 'FeatureCollection', features: [] };
 }
+
 module.exports = {
   buildStopPoint: buildStopPoint,
   buildRoute: buildRoute,

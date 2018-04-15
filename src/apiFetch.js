@@ -30,8 +30,13 @@ function getRouteSchedule(agency, route, onFetched) {
   return apiReq({ a: agency, command: 'schedule', r: route }, onFetched);
 }
 
+function getAgencies(onFetched) {
+  return apiReq({ command: 'agencyList' }, onFetched);
+}
+
 module.exports = {
   getRoutesTags: getRoutesTags,
   getRoute: getRoute,
   getRouteSchedule: getRouteSchedule,
+  getAgencies: getAgencies,
 };

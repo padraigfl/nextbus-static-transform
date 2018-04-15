@@ -1,5 +1,7 @@
 'use strict';
 
+var forceArray = require('./utils/forceArray');
+
 function parseCoordinates(coordinates) {
   return [parseFloat(coordinates[0]), parseFloat(coordinates[1])];
 }
@@ -8,6 +10,8 @@ function addNewStops(routeStops, aggregator) {
   if (!aggregator) {
     aggregator = {};
   }
+  routeStops = forceArray(routeStops);
+
   var duplicateCounter = 0;
   routeStops.map(function(stop) {
     if (!aggregator[stop.tag]) {
@@ -21,6 +25,33 @@ function addNewStops(routeStops, aggregator) {
   return aggregator;
 };
 
+function getStops(directions) {
+  if(!directions){
+    directions = [];
+  } else {
+    directions = forceArray(directions);
+  }
+  var stops = {};
+  directions.forEach(function(direction) {
+    var dirStops = direction.stop.map(function(stop) { return stop.tag; });
+    if (direction.name === 'Outbound') {
+      if(!stops.outbound) {
+        stops.outbound = dirStops;
+        return;
+      }
+    } else if (direction.name === 'Outbound') {
+      if(!stops.inbound) {
+        stops.outbound = dirStops;
+        return;
+      }
+    }
+    stops[direction.title.replace(' ', '_')] =  dirStops;
+  });
+  if(Object.keys(stops).length === 0){
+    return;
+  }
+  return stops;
+}
 
 function minifyRouteStopData(routeData, routeAggregator, stopAggregator) {
   if(!routeAggregator) {
@@ -43,10 +74,7 @@ function minifyRouteStopData(routeData, routeAggregator, stopAggregator) {
       //   inbound: routeSchedule.route[0] ? returnTagValues(routeSchedule.route[0].header.stop) : undefined,
       //   outbound: routeSchedule.route[1] ? returnTagValues(routeSchedule.route[1].header.stop) : undefined
       // },
-      stops: {
-        inbound: routeData.route.direction[0] ? routeData.route.direction[0].stop.map(function(stop) { return stop.tag; }) : undefined,
-        outbound: routeData.route.direction[1] ? routeData.route.direction[1].stop.map(function(stop) { return stop.tag; }) : undefined,
-      },
+      stops: getStops(routeData.route.direction),
     };
   } catch (err) {
     console.log(err);

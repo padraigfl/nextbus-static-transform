@@ -29,3 +29,10 @@ Deduced infomation from API results (Note: may be SF-Muni exclusive)
 - five digit tags represent duplicates of three or four digit ones, same name and coordinates (e.g. 4th St & Castro St)
 - rail, tram and bus services provided by the same operation may not be differentiated even if they potentially are priced differently
 - there's going to be a lot of restrictions as to what kind of metadata can be derived from schedules without being extremely extensive (e.g. there are a lot of infrequent used outlier stops on routes which prevent the reliabilitiy of which stops are served on a given route). May still include something like "last outbound train" and "last outbound train to end of route" as a proof of concept.
+
+
+Todo:
+
+- all locations where an array is expected may return an object if only one entry
+- tests are deliberately unstable and serve primarily to ensure all routes follow same format
+- stopId not in all route stops http://webservices.nextbus.com/service/publicJSONFeed?command=routeConfig&a=pgc&r=20
