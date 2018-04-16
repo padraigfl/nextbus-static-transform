@@ -22,9 +22,9 @@ function buildStopPoint(stop) {
 
 function getLineStrings(routePath) {
   routePath = forceArray(routePath);
-  return routePath.map(function (points) {
-    points = forceArray(points);
-    var geoPath = points.point.map(function (point) {
+  return routePath.map(function (line) {
+    var points = forceArray(line.point);
+    var geoPath = points.map(function (point) {
       return [parseFloat(point.lon), parseFloat(point.lat)];
     });
     return geoPath;
@@ -41,7 +41,7 @@ function buildRoute(route) {
     },
     geometry: {
       type: 'MultiLineString',
-      coordinates: getLineStrings(route.route.path),
+      coordinates: getLineStrings(forceArray(route.route.path)),
     }
   };
 }

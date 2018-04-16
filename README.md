@@ -35,4 +35,6 @@ Todo:
 
 - all locations where an array is expected may return an object if only one entry
 - tests are deliberately unstable and serve primarily to ensure all routes follow same format
+- tests which actually focus on the code instead of having the correct format of API responses
 - stopId not in all route stops http://webservices.nextbus.com/service/publicJSONFeed?command=routeConfig&a=pgc&r=20
+

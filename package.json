@@ -9,7 +9,8 @@
     "nextbus_aggregated": "node src/buildAggregatedData.js sf-muni",
     "nextbus_geojsons": "node src/buildGeoJsons.js sf-muni routes",
     "nextbus_setup": "npm run nextbus_api_reqs && npm run nextbus_aggregated && npm run nextbus_geojsons",
-    "coverage": "nyc npm test"
+    "coverage": "nyc npm test",
+    "lint": "eslint -c .eslintrc.js --quiet src/* test/*"
   },
   "keywords": [
     "nextbus",

@@ -23,7 +23,7 @@ function addNewStops(routeStops, aggregator) {
   });
   console.log('Number of duplicate stops ommitted: ' + duplicateCounter);
   return aggregator;
-};
+}
 
 function getStops(directions) {
   if(!directions){
@@ -77,8 +77,7 @@ function minifyRouteStopData(routeData, routeAggregator, stopAggregator) {
       stops: getStops(routeData.route.direction),
     };
   } catch (err) {
-    console.log(err);
-    console.log('No data found for route ');
+    console.error(err);
   }
   return {
     routes: routeAggregator,

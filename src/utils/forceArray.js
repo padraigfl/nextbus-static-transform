@@ -5,4 +5,4 @@ module.exports = function (entry){
     entry = [entry];
   }
   return entry;
-}
+};
