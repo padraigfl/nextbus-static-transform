@@ -1,3 +1,5 @@
+'use strict';
+
 var fetch = require('node-fetch');
 
 function apiReq(attrs, onFetched) {

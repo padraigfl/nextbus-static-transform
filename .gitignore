@@ -67,3 +67,4 @@ typings/
 /src/output/schedules/*
 .DS_Store
 **/.DS_Store
+/.nyc_output/

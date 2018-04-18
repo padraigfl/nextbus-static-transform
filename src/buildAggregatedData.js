@@ -12,7 +12,7 @@ function addNewStops(routeStops, aggregator) {
   }
   routeStops = forceArray(routeStops);
 
-  var duplicateCounter = 0;
+  // var duplicateCounter = 0;
   routeStops.map(function(stop) {
     if (!aggregator[stop.tag]) {
       aggregator[stop.tag] = stop;
@@ -21,7 +21,7 @@ function addNewStops(routeStops, aggregator) {
       duplicateCounter += 1;
     }
   });
-  console.log('Number of duplicate stops ommitted: ' + duplicateCounter);
+  // console.log('Number of duplicate stops ommitted: ' + duplicateCounter);
   return aggregator;
 }
 

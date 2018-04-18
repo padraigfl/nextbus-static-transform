@@ -26,7 +26,7 @@ setTimeout(function(){
       route = data;
     })
   });
-}, 5000);
+}, 8000);
 
 setTimeout(function(){
   describe('Agencies', function() {
@@ -128,4 +128,4 @@ setTimeout(function(){
     });
   });
   run();
-}, 10000);
+}, 16000);
