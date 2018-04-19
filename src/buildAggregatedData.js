@@ -13,13 +13,13 @@ function addNewStops(routeStops, aggregator) {
   routeStops = forceArray(routeStops);
 
   // var duplicateCounter = 0;
-  routeStops.map(function(stop) {
+  routeStops.forEach(function(stop) {
     if (!aggregator[stop.tag]) {
       aggregator[stop.tag] = stop;
     }
-    else {
-      duplicateCounter += 1;
-    }
+    // else {
+    //   duplicateCounter += 1;
+    // }
   });
   // console.log('Number of duplicate stops ommitted: ' + duplicateCounter);
   return aggregator;
