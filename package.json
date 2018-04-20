@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha --reporter spec --delay",
+    "test:setup": "node setupTests.js && npm run test",
     "build": "WEBPACK_ENV=build webpack",
     "coverage": "nyc npm test",
     "lint": "eslint -c .eslintrc.js --quiet src/* test/*"

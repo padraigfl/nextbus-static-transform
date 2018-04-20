@@ -3,47 +3,16 @@
 'use strict';
 
 var expect = require('chai').expect;
-var module = require('../src/index')
-var api = module.api;
+var module = require('../src/index');
 var aggregator = module.aggregator;
 var geo = module.geo;
+var io = require('../src/jsonIO');
 
-var agencies;
-var agency;
-var route;
 var stopAggregators;
-api.getAgencies().then(function(data){
-  agencies = data;
-  agency = data.agency[parseInt(data.agency.length * Math.random())];
-  console.log('Testing Routes for Agency: '+agency.tag);
-});
+
+var route = io.readJSON('./test/testFile.json');
 
 setTimeout(function(){
-  api.getRoutesTags(agency.tag).then(function(data){
-    var randomRoute = data.route[parseInt(data.route.length * Math.random())];
-    console.log('Selected route: '+randomRoute.tag);
-    api.getRoute(agency.tag, randomRoute.tag).then(function(data){
-      route = data;
-    })
-  });
-}, 8000);
-
-setTimeout(function(){
-  describe('Agencies', function() {
-    it('fetches agency data successfully', function() {
-      expect(!!agencies).to.equal(true);
-    });
-    it('contains agency array', function() {
-      expect(!!agencies.agency).to.equal(true);
-      expect(!!agencies.agency.length).to.equal(true);
-    });
-    it('entries in array have correct format', function(){
-      agencies.agency.map(function(agency){
-        expect(!!agency.tag).to.equal(true);
-        expect(typeof agency.tag).to.equal('string');
-      });
-    });
-  });
   describe('routes', function() {
     it('fetches route data successfully', function() {
       expect(!!route).to.equal(true);
@@ -128,4 +97,4 @@ setTimeout(function(){
     });
   });
   run();
-}, 16000);
+}, 2000);

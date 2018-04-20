@@ -11,8 +11,8 @@ Aims
 - [ ] Schema documentation of both nextbus responses and outputs
 - [ ] GeoJSONs of anything I possibly can
 - [x] Validation _(defaults and Array coercion)_
-- [x] Verify other agencies work (only used sf-muni so far)
-- [x] Testing
+- [x] Verify other agencies work ~(only used sf-muni so far)~
+- [x] Testing (testfile containing junk data is built from real data and must be regularly updated)
 - [ ] Optional schedule data built into routes (e.g. is24hour, is7Day, number of runs per day) _(partially in PR)_
 - [ ] Optional schedule data built into stops (e.g. routes on stop, expected times at stop)  _(in PR)_
 - [ ] Generate and export useful data to somewhere of all available agencies
@@ -21,13 +21,15 @@ Initialisation
 ---
 The example.js file contains code which should be able to build data, potentially with some modifications required
 
+Tests are initialised using the `setupTests.js` script, which obfuscates real data so tests can run without needing to deal with an api.
+
 Todo
 ---
 
-- all locations where an array is expected may return an object if only one entry
-- tests are deliberately unstable and serve primarily to ensure all routes follow same format
-- tests which actually focus on the code instead of having the correct format of API responses
-- stopId not in all route stops http://webservices.nextbus.com/service/publicJSONFeed?command=routeConfig&a=pgc&r=20
+- [x] all locations where an array is expected may return an object if only one entry
+- [x] ~tests are deliberately unstable and serve primarily to ensure all routes follow same format~
+- [ ] tests which actually focus on the code instead of having the correct format of API responses
+- [ ]stopId not in all route stops http://webservices.nextbus.com/service/publicJSONFeed?command=routeConfig&a=pgc&r=20 appears it may be an sf muni exclusive with others spotted elsewhere.
 
 -----
 Old Notes:
