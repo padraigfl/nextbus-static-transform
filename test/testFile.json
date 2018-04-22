@@ -26,43 +26,6 @@
       {
         "lon": "abc",
         "title": "abc",
-        "stopId": "abc",
-        "tag": "abc",
-        "lat": "abc"
-      },
-      {
-        "lon": "abc",
-        "title": "abc",
-        "stopId": "abc",
-        "tag": "abc",
-        "lat": "abc"
-      },
-      {
-        "lon": "abc",
-        "title": "abc",
-        "shortTitle": "abc",
-        "stopId": "abc",
-        "tag": "abc",
-        "lat": "abc"
-      },
-      {
-        "lon": "abc",
-        "title": "abc",
-        "stopId": "abc",
-        "tag": "abc",
-        "lat": "abc"
-      },
-      {
-        "lon": "abc",
-        "title": "abc",
-        "stopId": "abc",
-        "tag": "abc",
-        "lat": "abc"
-      },
-      {
-        "lon": "abc",
-        "title": "abc",
-        "stopId": "abc",
         "tag": "abc",
         "lat": "abc"
       }
@@ -72,21 +35,6 @@
     "color": "abc",
     "direction": {
       "stop": [
-        {
-          "tag": "abc"
-        },
-        {
-          "tag": "abc"
-        },
-        {
-          "tag": "abc"
-        },
-        {
-          "tag": "abc"
-        },
-        {
-          "tag": "abc"
-        },
         {
           "tag": "abc"
         },
@@ -180,6 +128,126 @@
           {
             "lon": "abc",
             "lat": "abc"
+          }
+        ]
+      },
+      {
+        "point": [
+          {
+            "lon": "abc",
+            "lat": "abc"
+          },
+          {
+            "lon": "abc",
+            "lat": "abc"
+          },
+          {
+            "lon": "abc",
+            "lat": "abc"
+          },
+          {
+            "lon": "abc",
+            "lat": "abc"
+          },
+          {
+            "lon": "abc",
+            "lat": "abc"
+          },
+          {
+            "lon": "abc",
+            "lat": "abc"
+          },
+          {
+            "lon": "abc",
+            "lat": "abc"
+          },
+          {
+            "lon": "abc",
+            "lat": "abc"
+          },
+          {
+            "lon": "abc",
+            "lat": "abc"
+          },
+          {
+            "lon": "abc",
+            "lat": "abc"
+          },
+          {
+            "lon": "abc",
+            "lat": "abc"
+          },
+          {
+            "lon": "abc",
+            "lat": "abc"
+          },
+          {
+            "lon": "abc",
+            "lat": "abc"
+          },
+          {
+            "lon": "abc",
+            "lat": "abc"
+          },
+          {
+            "lon": "abc",
+            "lat": "abc"
+          },
+          {
+            "lon": "abc",
+            "lat": "abc"
+          },
+          {
+            "lon": "abc",
+            "lat": "abc"
+          },
+          {
+            "lon": "abc",
+            "lat": "abc"
+          },
+          {
+            "lon": "abc",
+            "lat": "abc"
+          },
+          {
+            "lon": "abc",
+            "lat": "abc"
+          },
+          {
+            "lon": "abc",
+            "lat": "abc"
+          },
+          {
+            "lon": "abc",
+            "lat": "abc"
+          },
+          {
+            "lon": "abc",
+            "lat": "abc"
+          },
+          {
+            "lon": "abc",
+            "lat": "abc"
+          },
+          {
+            "lon": "abc",
+            "lat": "abc"
+          },
+          {
+            "lon": "abc",
+            "lat": "abc"
+          },
+          {
+            "lon": "abc",
+            "lat": "abc"
+          },
+          {
+            "lon": "abc",
+            "lat": "abc"
+          },
+          {
+            "lon": "abc",
+            "lat": "abc"
           },
           {
             "lon": "abc",
@@ -556,18 +624,6 @@
           {
             "lon": "abc",
             "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
           }
         ]
       },
@@ -713,314 +769,6 @@
             "lon": "abc",
             "lat": "abc"
           },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          }
-        ]
-      },
-      {
-        "point": [
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          },
-          {
-            "lon": "abc",
-            "lat": "abc"
-          }
-        ]
-      },
-      {
-        "point": [
           {
             "lon": "abc",
             "lat": "abc"

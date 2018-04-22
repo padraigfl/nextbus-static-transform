@@ -4,8 +4,9 @@
   "description": "A script to pull schedule data so as to reduce risk of hitting API limits",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --reporter spec --delay",
-    "test:setup": "node setupTests.js && npm run test",
+    "test": "mocha --reporter spec",
+    "testsetup": "node setupTests.js",
+    "test:setup": "npm run testsetup && npm run test",
     "build": "WEBPACK_ENV=build webpack",
     "coverage": "nyc npm test",
     "lint": "eslint -c .eslintrc.js --quiet src/* test/*"
@@ -28,7 +29,11 @@
     "eslint-plugin-mocha": "^4.12.1",
     "mocha": "^5.0.4",
     "nyc": "^11.6.0",
+    "pre-commit": "^1.2.2",
     "webpack": "^4.5.0",
     "webpack-cli": "^2.0.14"
-  }
+  },
+  "precommit": [
+    "test:setup"
+  ]
 }
