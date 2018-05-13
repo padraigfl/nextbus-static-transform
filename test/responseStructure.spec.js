@@ -3,7 +3,7 @@
 'use strict';
 
 var expect = require('chai').expect;
-var io = require('../src/jsonIO');
+var io = require('../utils/jsonIO');
 
 var route = io.readJSON('./test/testFile.json');
 

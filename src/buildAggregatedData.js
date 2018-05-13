@@ -48,7 +48,7 @@ function getStops(directions) {
     stops[direction.title.replace(' ', '_')] =  dirStops;
   });
   if(Object.keys(stops).length === 0){
-    return;
+    return undefined;
   }
   return stops;
 }
@@ -66,6 +66,7 @@ function minifyRouteStopData(routeData, routeAggregator, stopAggregator) {
       title: routeData.route.title,
       color: routeData.route.color,
       tag: routeData.route.tag,
+      shortTitle: routeData.route.shortTitle,
       oppositeColor: routeData.route.oppositeColor,
       max: parseCoordinates([routeData.route.latMax, routeData.route.lonMax]),
       min: parseCoordinates([routeData.route.latMin, routeData.route.lonMin]),
@@ -77,7 +78,7 @@ function minifyRouteStopData(routeData, routeAggregator, stopAggregator) {
       stops: getStops(routeData.route.direction),
     };
   } catch (err) {
-    console.error(err);
+    throw TypeError(err.message); // eslint-disable-line
   }
   return {
     routes: routeAggregator,

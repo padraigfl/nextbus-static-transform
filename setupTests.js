@@ -1,8 +1,9 @@
 'use strict';
 
-var module = require('./src/index')
+var module = require('./src/index');
 var api = module.api;
-var io = require('./src/jsonIO');
+var io = require('./utils/jsonIO');
+var forceArray = require('./src/utils/forceArray');
 
 function junkData(obj) {
   if(obj) {
@@ -26,7 +27,8 @@ api.getAgencies().then(function(data){
   var agency = data.agency[parseInt(data.agency.length * Math.random())];
   console.log('Testing Routes for Agency: '+agency.tag); // eslint-disable-line
   api.getRoutesTags(agency.tag).then(function(data){
-    var randomRoute = data.route[parseInt(data.route.length * Math.random())];
+    var route = forceArray(data.route);
+    var randomRoute = route[parseInt(route.length * Math.random())];
     console.log('Selected route: '+randomRoute.tag); // eslint-disable-line
     api.getRoute(agency.tag, randomRoute.tag).then(function(res){
       var junkRoute = junkData(res);

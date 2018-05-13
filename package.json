@@ -2,14 +2,15 @@
   "name": "nextbus-schedule-builder",
   "version": "0.1.0",
   "description": "A script to pull schedule data so as to reduce risk of hitting API limits",
-  "main": "index.js",
+  "main": "./src/index.js",
   "scripts": {
+    "build": "WEBPACK_ENV=build webpack",
+    "coveralls": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
+    "coverage": "nyc npm test",
+    "lint": "eslint -c .eslintrc.js --quiet src/* test/*",
     "test": "mocha --reporter spec",
     "testsetup": "node setupTests.js",
-    "test:setup": "npm run testsetup && npm run test",
-    "build": "WEBPACK_ENV=build webpack",
-    "coverage": "nyc npm test",
-    "lint": "eslint -c .eslintrc.js --quiet src/* test/*"
+    "test:setup": "npm run testsetup && npm run test"
   },
   "keywords": [
     "nextbus",
@@ -24,6 +25,7 @@
   },
   "devDependencies": {
     "chai": "^4.1.2",
+    "coveralls": "^3.0.1",
     "eslint": "^4.19.0",
     "eslint-plugin-import": "^2.9.0",
     "eslint-plugin-mocha": "^4.12.1",
@@ -34,6 +36,19 @@
     "webpack-cli": "^2.0.14"
   },
   "precommit": [
-    "test:setup"
-  ]
+    "test:setup",
+    "build"
+  ],
+  "nyc": {
+    "exclude": [
+      "coverage/**",
+      "test/**",
+      "test{,-*}.js",
+      "**/*.test.js",
+      "**/__tests__/**",
+      "**/node_modules/**",
+      "src/apiFetch.js",
+      "utils/**"
+    ]
+  }
 }
