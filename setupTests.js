@@ -5,6 +5,8 @@ var api = module.api;
 var io = require('./utils/jsonIO');
 var forceArray = require('./src/utils/forceArray');
 
+var x = 0;
+
 function junkData(obj) {
   if(obj) {
     Object.keys(obj).forEach(function(key) {
@@ -12,6 +14,10 @@ function junkData(obj) {
       if(typ === 'object') {
         obj[key] = junkData(obj[key]);
       } else if (typ === 'string') {
+        if(key === 'name') {
+          obj[key] = x%2===0 ? 'Inbound' : 'Outbound';
+          return;
+        }
         obj[key] = 'abc';
       } else if (typ === 'boolean') {
         obj[key] = true;

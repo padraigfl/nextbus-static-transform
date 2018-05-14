@@ -7,9 +7,6 @@ function parseCoordinates(coordinates) {
 }
 
 function addNewStops(routeStops, aggregator) {
-  if (!aggregator) {
-    aggregator = {};
-  }
   routeStops = forceArray(routeStops);
 
   // var duplicateCounter = 0;
@@ -39,7 +36,7 @@ function getStops(directions) {
         stops.outbound = dirStops;
         return;
       }
-    } else if (direction.name === 'Outbound') {
+    } else if (direction.name === 'Inbound') {
       if(!stops.inbound) {
         stops.outbound = dirStops;
         return;

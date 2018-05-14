@@ -4,28 +4,28 @@
 
 [![Coverage Status](https://coveralls.io/repos/github/padraigfl/nextbus-static-transform/badge.svg?branch=master)](https://coveralls.io/github/padraigfl/nextbus-static-transform?branch=master) (See: [Coverage](#coverage) )
 
-- [Introduction](#introduction)
-- [Initialisation](#initialisation)
-- [Functions](#functions)
-- [Coverage](#coverage)
+1. [Introduction](#introduction)
+2. [Initialisation](#initialisation)
+3. [Functions](#functions)
+4. [Known Issues (Why coverage sucks and more)](#issues)
 
 ## Introduction
 
 This is broken off from a portion of a coding challenge I received where there were issues with the Nextbus API that I felt could be resolved by caching a minified form of all static requests prior to deployment.
 
-The basic goal is to generate a selection of tools which will perform requests to Nextbus and build new data models from them to refer to for either offline use or to reduce the size of requests required.These will deal with what is generally fixed data relating to routes, stops and (potentially) schedules.
+The basic goal is to generate a selection of tools which will perform requests to Nextbus and build new data models from them to refer to for either offline use or to reduce the size of requests required. These will deal with what is generally fixed data relating to routes, stops and (potentially) schedules.
 
 ## Initialisation
 
 The example.js file contains code which should be able to build data, potentially with some modifications required. This will be modified into a gist at some point instead.
 
-Test requirements are initialised using the `setupTests.js` script, which is ran in advance obfuscates real data into testFile.json so tests can run without needing to deal with an api. As there is inconsistency with the formats used across various services, I've tried to update these constantly to catch outliers.
+Test requirements are initialised using the `setupTests.js` script, which is ran in advance and obfuscates real data into testFile.json so tests can run without needing to deal with an api. As there is inconsistency with the formats used across various services, I've tried to update these constantly to catch outliers.
 
 ## Functions
 
 ### .api
 
-Pretty straightforward set of axios requests to the necessary Nextbus JSON endpoints
+Pretty straightforward set of axios requests to the necessary Nextbus JSON endpoints. I found the Nextbus documentation needlessly convoluted (to my knowledge it doesn't even mention the JSON endpoint)
 
 Common parameters are:
 
@@ -212,7 +212,7 @@ Uses the coordiantes mentioned above to build a geoJSON of the route, by using F
 
 - `stop`: As there is no endpoint to get stop data, this requires the aggregated stops object from above.
 
-Utilises geo coordinates from responses to build geojson objects. As with buildRoute, the returned value is an entry for a features collection
+Utilises geo coordinates from responses to build geojson features. As with buildRoute, the returned value is an entry for a features collection
 
 ```js
 {
@@ -232,6 +232,17 @@ Utilises geo coordinates from responses to build geojson objects. As with buildR
 }
 ```
 
-## Coverage
+## Issues
 
-Due to a huge number of very repetitive outliers, coverage is not being extensively thorough. Nextbus is inconsistent with its usage of arrays, anywhere with an array which may have a single result tends to treat the single result as an entity of its own instead of as part of an array
+### Response Inconsistency
+
+Due to a huge number of very repetitive outliers (unsurprising for a system which has to cater to full city lines and single track university lines), coverage is not being extensively thorough.
+Nextbus is inconsistent with its usage of arrays, anywhere with an array which may have a single result tends to treat the single result as an object instead of as a single entry array. As I've encounterd errors I've tried to resolve them and hopefully there shouldn't be many from here on out.
+
+### Stop tags
+
+One major issue here for map making and such is that many if not most locations will have multiple stops (the majority may have an inbound and outbound stop). I noticed with the SF-Muni responses that these associated stops tended to have a 5 digit tag to correspond with primary 4 digit number (a prefix of 1 or 3 being added, which seemed to follow some trends). I've no clue if this was SF Muni exclusive though so I've made no use of it.
+
+### Accomodating Schedule Data
+
+I've had means of making use of the schedule data in mind for ages but as of yet I've yet to think of an effective schema to use or way to have it as an option that doesn't severely bloat the project both in terms of size and convoluted functions. That the aggregator aggregates the stops regardless of whether you actually want them annoys me enough already.
