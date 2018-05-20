@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/padraigfl/nextbus-static-transform.svg?branch=master)](https://travis-ci.org/padraigfl/nextbus-static-transform)
 
-[![Coverage Status](https://coveralls.io/repos/github/padraigfl/nextbus-static-transform/badge.svg?branch=master)](https://coveralls.io/github/padraigfl/nextbus-static-transform?branch=master) (See: [Coverage](#coverage) )
+[![Coverage Status](https://coveralls.io/repos/github/padraigfl/nextbus-static-transform/badge.svg?branch=master)](https://coveralls.io/github/padraigfl/nextbus-static-transform?branch=master) (See: [Coverage](#issues) )
 
 1. [Introduction](#introduction)
 2. [Initialisation](#initialisation)
