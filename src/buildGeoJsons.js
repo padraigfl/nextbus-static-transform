@@ -46,8 +46,8 @@ function buildRoute(route) {
   };
 }
 
-function buildFeaturesShell() {
-  return { type: 'FeatureCollection', features: [] };
+function buildFeaturesShell(copyright) {
+  return { type: 'FeatureCollection', features: [], copyright: copyright };
 }
 
 module.exports = {

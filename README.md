@@ -17,7 +17,7 @@ The basic goal is to generate a selection of tools which will perform requests t
 
 ## Initialisation
 
-The example.js file contains code which should be able to build data, potentially with some modifications required. This will be modified into a gist at some point instead.
+The script file located at `scripts/saveAllRoutes.js` contains code which (assuming API requests are adequately divided time wise) will generate condensed json files of route and stop data with GeoJSONS for both too. (WARNING: due to restrictions on Nextbus's API, there are significant timeouts contained within this script so it will take ~15 minutes to fully run)
 
 Test requirements are initialised using the `setupTests.js` script, which is ran in advance and obfuscates real data into testFile.json so tests can run without needing to deal with an api. As there is inconsistency with the formats used across various services, I've tried to update these constantly to catch outliers.
 

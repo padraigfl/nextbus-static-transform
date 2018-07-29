@@ -7,14 +7,21 @@ function readJSON(directory) {
   return JSON.parse(fs.readFileSync(directory, 'utf8'));
 }
 
-function writeJSON (filename, jsonData) {
+function writeJSON(filename, jsonData) {
   return fs.writeFile(filename, JSON.stringify(jsonData, null, '  '), function(err) {
     if (err) throw err;
-    console.log('The file has been saved!');
   });
 }
+
+function createDirectory(directory) {
+  if (!fs.existsSync(directory)) {
+    fs.mkdirSync(directory);
+  }
+}
+
 
 module.exports = {
   readJSON: readJSON,
   writeJSON: writeJSON,
+  createDirectory: createDirectory,
 };

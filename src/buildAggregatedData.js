@@ -30,7 +30,7 @@ function getStops(directions) {
   }
   var stops = {};
   directions.forEach(function(direction) {
-    var dirStops = direction.stop.map(function(stop) { return stop.tag; });
+    var dirStops = forceArray(direction.stop).map(function(stop) { return stop.tag; });
     if (direction.name === 'Outbound') {
       if(!stops.outbound) {
         stops.outbound = dirStops;
@@ -50,16 +50,26 @@ function getStops(directions) {
   return stops;
 }
 
+function addCopyright(routes, stops, copyright) {
+  if (!routes.copyright) {
+    routes.copyright = copyright;
+  }
+  if (!stops.copyright) {
+    stops.copyright = copyright;
+  }
+}
+
 function minifyRouteStopData(routeData, routeAggregator, stopAggregator) {
   if(!routeAggregator) {
-    routeAggregator = {};
+    routeAggregator = { data: {} };
   }
   if(!stopAggregator) {
-    stopAggregator = {};
+    stopAggregator = { data: {} };
   }
+  addCopyright(routeAggregator, stopAggregator, routeData.copyright);
   try {
-    stopAggregator = addNewStops(routeData.route.stop, stopAggregator);
-    routeAggregator[routeData.route.tag] = {
+    stopAggregator.data = addNewStops(routeData.route.stop, stopAggregator.data);
+    routeAggregator.data[routeData.route.tag] = {
       title: routeData.route.title,
       color: routeData.route.color,
       tag: routeData.route.tag,

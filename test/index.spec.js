@@ -3,9 +3,9 @@
 'use strict';
 
 var expect = require('chai').expect;
-var module = require('../src/index');
-var aggregator = module.aggregator;
-var geo = module.geo;
+var mod= require('../src/index');
+var aggregator = mod.aggregator;
+var geo = mod.geo;
 var io = require('../utils/jsonIO');
 var forceArray = require('../src/utils/forceArray');
 
@@ -23,7 +23,7 @@ describe('aggregators', function(){
     expect(!!agg.stops).to.equal(true);
   });
   it('appends to existing route object', function(){
-    expect(Object.keys(aggregator(route, {'test': 'blah'}).routes).length).to.equal(2);
+    expect(Object.keys(aggregator(route, { data: { 'test': 'blah'} }).routes).length).to.equal(2);
   });
   it('throws error when passed other format structure', function(){
     expect(function(){ aggregator({}) }).to.throw(TypeError);
@@ -40,7 +40,7 @@ describe('geoJsons', function(){
     });
   });
   it('builds empty features collection ', function(){
-    expect(geo.buildFeaturesShell()).to.deep.equal({ type: 'FeatureCollection', features: [] });
+    expect(geo.buildFeaturesShell('test')).to.deep.equal({ type: 'FeatureCollection', features: [], copyright: 'test' });
   });
 });
 describe('utils', function(){
