@@ -45,6 +45,7 @@ const buildGeoStops = (stops) => {
 }
 
 const processAgencyRoutes = async (agencyTag) => {
+  createDirectory(`${dir}`)
   createDirectory(`${dir}/${agencyTag}`)
   const routeTags = await getAgencyRouteTags(agencyTag);
 
@@ -57,9 +58,17 @@ const processAgencyRoutes = async (agencyTag) => {
     return route;
   }));
 
-  const minifiedData = routes.reduce((acc, route) => (
+  let minifiedData = routes.reduce((acc, route) => (
     aggregateData(route, acc.routes, acc.stops)
   ), { });
+
+  const schedules = await Promise.all(routeTags.map((rTag) =>
+    api.getRouteSchedule(agencyTag, rTag)
+      .then(data => {
+        minifiedData = aggregateData.addScheduleData(rTag, data, minifiedData.routes, minifiedData.stops);
+      })
+  ));
+
   writeJSON(`${dir}/${agencyTag}/stops.json`, minifiedData.stops);
   writeJSON(`${dir}/${agencyTag}/routes.json`, minifiedData.routes);
   writeJSON(`${dir}/${agencyTag}/routesMap.geojson`, buildGeoRoutes(routes));
@@ -75,3 +84,4 @@ const getAllRoutes = async () => {
 }
 
 getAllRoutes();
+// processAgencyRoutes('jtafla');
