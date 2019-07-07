@@ -7,9 +7,12 @@ function parseCoordinates(coordinates) {
 }
 
 function addStopRoutes(routeTag, directions, aggregator) {
-  directions.forEach(function(direction) {
-    direction.stop.forEach(function(stop) {
-      if (!aggregator[stop.tag].routes[routeTag]){
+  forceArray(directions).forEach(function(direction) {
+    if (!direction || !direction.stop) {
+      return;
+    }
+    forceArray(direction.stop).forEach(function(stop) {
+      if (!aggregator[stop.tag].routes[routeTag]) {
         aggregator[stop.tag].routes[routeTag] = {};
       }
       aggregator[stop.tag].routes[routeTag][direction.name] = true;
@@ -35,28 +38,30 @@ function addNewStops(routeStops, aggregator) {
 }
 
 function getStops(directions) {
-  if(!directions){
+  if (!directions) {
     directions = [];
   } else {
     directions = forceArray(directions);
   }
   var stops = {};
   directions.forEach(function(direction) {
-    var dirStops = forceArray(direction.stop).map(function(stop) { return stop.tag; });
+    var dirStops = forceArray(direction.stop).map(function(stop) {
+      return stop.tag;
+    });
     if (direction.name === 'Outbound') {
-      if(!stops.outbound) {
+      if (!stops.outbound) {
         stops.outbound = dirStops;
         return;
       }
     } else if (direction.name === 'Inbound') {
-      if(!stops.inbound) {
+      if (!stops.inbound) {
         stops.outbound = dirStops;
         return;
       }
     }
-    stops[direction.title.replace(' ', '_')] =  dirStops;
+    stops[direction.title] = dirStops;
   });
-  if(Object.keys(stops).length === 0){
+  if (Object.keys(stops).length === 0) {
     return undefined;
   }
   return stops;
@@ -71,8 +76,8 @@ function addCopyright(routes, stops, copyright) {
   }
 }
 
-function getFirstTime(times){
-  for(var i in times){
+function getFirstTime(times) {
+  for (var i in times) {
     if (times[i].epochTime !== '-1') {
       return times[i].content;
     }
@@ -80,23 +85,28 @@ function getFirstTime(times){
   return 'fail';
 }
 
-function getRouteScheduleDetails(daySchedule){
-  if (daySchedule[0] && Array.isArray(daySchedule[0].stop)) {
+function getRouteScheduleDetails(daySched) {
+  const daySchedule = forceArray(daySched);
+  const stop = daySchedule[0] ? forceArray(daySchedule[0].stop) : undefined;
+  if (stop.length > 0) {
     return {
       first: getFirstTime(daySchedule[0].stop),
-      last: getFirstTime(daySchedule[daySchedule.length - 1].stop),
+      last: getFirstTime(daySchedule[daySchedule.length - 1].stop)
     };
   }
 }
 
 function getStopTimes(circuits, idx) {
-  return circuits.map(function( circuit) {
-    return circuit.stop[idx].content;
-  }).filter(function(t){
-    if(t !== '--'){
-      return t;
-    }
-  });
+  const circuitsArray = forceArray(circuits)
+  return circuitsArray
+    .map(function(circuit) {
+      return circuit.stop[idx].content;
+    })
+    .filter(function(t) {
+      if (t !== '--') {
+        return t;
+      }
+    });
 }
 
 function getTimes(idx, daySchedule) {
@@ -106,59 +116,111 @@ function getTimes(idx, daySchedule) {
 }
 
 //this is way easier with ES6
-function addScheduleData(routeTag, scheduleData, routeAggregator, stopAggregator) {
-  if(!Array.isArray(scheduleData.route)) {
-    scheduleData.route = [scheduleData.route];
-  }
-  if(routeAggregator[routeTag]) {
-    routeAggregator[routeTag].scheduledStops = { // stops that are scheduled
-      inbound: Array.isArray(scheduleData.route) && scheduleData.route[0].direction ?
-        scheduleData.route[0].header.stop.map(function(stop) { return stop.tag; }) : undefined,
-      outbound: Array.isArray(scheduleData.route) && scheduleData.route.length > 1 && scheduleData.route[1].direction ?
-        scheduleData.route[1].header.stop.map(function(stop) { return stop.tag; }) : undefined,
+function addScheduleData(
+  routeTag,
+  scheduleData,
+  routeAggregator,
+  stopAggregator
+) {
+  var routeAgg = Object.assign({}, routeAggregator);
+  var stopAgg = Object.assign({}, stopAggregator);
+  scheduleData.route = forceArray(scheduleData.route);
+
+  if (routeAgg.data[routeTag]) {
+    routeAgg.data[routeTag].scheduledStops = {
+      // stops that are scheduled
+      inbound:
+        Array.isArray(scheduleData.route) &&
+        !!scheduleData.route[0] &&
+        scheduleData.route[0].direction &&
+        scheduleData.route[0].header.stop
+          ? forceArray(scheduleData.route[0].header.stop).map(function(stop) {
+            return stop.tag;
+          })
+          : undefined,
+      outbound:
+        Array.isArray(scheduleData.route) &&
+        scheduleData.route.length > 1 &&
+        scheduleData.route[1].direction &&
+        scheduleData.route[1].header &&
+        scheduleData.route[1].header.stop
+          ? forceArray(scheduleData.route[1].header.stop).map(function(stop) {
+            return stop.tag;
+          })
+          : undefined
     };
   }
 
-  scheduleData.route.forEach(function(day) {
-    day.header.stop.forEach(function(stop, idx) { // add list of routes to stop
-      if(!stopAggregator[stop.tag]){
+  if (scheduleData && Array.isArray(scheduleData.route)) {
+    scheduleData.route.forEach(function(day) {
+      if (!day) {
         return;
       }
-      if(!stopAggregator[stop.tag].scheduleRoutes) {
-        stopAggregator[stop.tag].scheduleRoutes = {};
+      if (day.header) {
+        forceArray(day.header.stop).forEach(function(stop, idx) {
+          // add list of routes to stop
+          if (!stopAgg.data[stop.tag]) {
+            return;
+          }
+          if (!stopAgg.data[stop.tag].scheduleRoutes) {
+            stopAgg.data[stop.tag].scheduleRoutes = {};
+          }
+          if (!stopAgg.data[stop.tag].scheduleRoutes[routeTag]) {
+            stopAgg.data[stop.tag].scheduleRoutes[routeTag] = {};
+          }
+          if (!stopAgg.data[stop.tag].scheduleRoutes[routeTag][day.direction]) {
+            stopAgg.data[stop.tag].scheduleRoutes[routeTag][day.direction] = {};
+          }
+          stopAgg.data[stop.tag].scheduleRoutes[routeTag][day.direction][
+            day.serviceClass
+          ] = getTimes(idx, day.tr);
+        });
       }
-      if(!stopAggregator[stop.tag].scheduleRoutes[routeTag] ) {
-        stopAggregator[stop.tag].scheduleRoutes[routeTag] = { };
+      if (!routeAgg.data[routeTag].scheduledTimeRange) {
+        routeAgg.data[routeTag].scheduledTimeRange = {};
       }
-      if (!stopAggregator[stop.tag].scheduleRoutes[routeTag][day.direction]) {
-        stopAggregator[stop.tag].scheduleRoutes[routeTag][day.direction] = {};
+      if (routeAgg.data[routeTag] && day.direction) {
+        if (
+          routeAgg.data[routeTag].scheduledTimeRange &&
+          !routeAgg.data[routeTag].scheduledTimeRange[day.direction]
+        ) {
+          routeAgg.data[routeTag].scheduledTimeRange[day.direction] = {};
+        }
+        routeAgg.data[routeTag].scheduledTimeRange[day.direction][
+          day.serviceClass
+        ] = getRouteScheduleDetails(day.tr); // this makes more sense in routes
       }
-      stopAggregator[stop.tag].scheduleRoutes[routeTag][day.direction][day.serviceClass] = getTimes(idx, day.tr);
     });
-    if(routeAggregator[routeTag]){
-      if(routeAggregator[routeTag].scheduledStops && !routeAggregator[routeTag].scheduledStops[day.direction]){
-        routeAggregator[routeTag].scheduledStops[day.direction] = {};
-      }
-      routeAggregator[routeTag].scheduledStops[day.direction][day.serviceClass] = getRouteScheduleDetails(day.tr); // this makes more sense in routes
-    }
-  });
+  }
+
   return {
-    routes: routeAggregator,
-    stops: stopAggregator,
+    routes: routeAgg,
+    stops: stopAgg
   };
 }
 
 function minifyRouteStopData(routeData, routeAggregator, stopAggregator) {
-  if(!routeAggregator) {
+  if (!routeAggregator) {
     routeAggregator = { data: {} };
+  } else {
+    routeAggregator = Object.assign({}, routeAggregator);
   }
-  if(!stopAggregator) {
+  if (!stopAggregator) {
     stopAggregator = { data: {} };
+  } else {
+    stopAggregator = Object.assign({}, stopAggregator);
   }
   addCopyright(routeAggregator, stopAggregator, routeData.copyright);
   try {
-    stopAggregator.data = addNewStops(routeData.route.stop, stopAggregator.data);
-    stopAggregator.data = addStopRoutes(routeData.route.tag, routeData.route.direction, stopAggregator.data);
+    stopAggregator.data = addNewStops(
+      routeData.route.stop,
+      stopAggregator.data
+    );
+    stopAggregator.data = addStopRoutes(
+      routeData.route.tag,
+      routeData.route.direction,
+      stopAggregator.data
+    );
     routeAggregator.data[routeData.route.tag] = {
       title: routeData.route.title,
       color: routeData.route.color,
@@ -172,14 +234,14 @@ function minifyRouteStopData(routeData, routeAggregator, stopAggregator) {
       //   inbound: routeSchedule.route[0] ? returnTagValues(routeSchedule.route[0].header.stop) : undefined,
       //   outbound: routeSchedule.route[1] ? returnTagValues(routeSchedule.route[1].header.stop) : undefined
       // },
-      stops: getStops(routeData.route.direction),
+      stops: getStops(routeData.route.direction)
     };
   } catch (err) {
     throw TypeError(err.message); // eslint-disable-line
   }
   return {
     routes: routeAggregator,
-    stops: stopAggregator,
+    stops: stopAggregator
   };
 }
 
