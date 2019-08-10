@@ -49,7 +49,7 @@ describe('checking API response follows expected structure', function() {
       directions = [directions];
     }
     directions.forEach(function(dir){
-      dir.stop.map(function(dirStop) {
+      forceArray(dir.stop).map(function(dirStop) {
         expect(!!dirStop.tag).to.equal(true);
       });
     });

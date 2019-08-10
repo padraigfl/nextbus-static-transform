@@ -8,70 +8,79 @@ const geo = nextBusTools.geo;
 
 const dir = './routes';
 
-const getRouteData = (agencyTag, routeTag) => (
-  api.getRoute(agencyTag, routeTag)
-    .then( route => route)
-)
+const fails = [];
 
-const getAgencyRouteTags = agencyTag => (
-  api.getRoutesTags( agencyTag )
-    .then(({ route: routes}) => (
-      forceArray(routes).map(({ tag }) => tag)
-    ))
-);
+const getRouteData = (agencyTag, routeTag) =>
+  api.getRoute(agencyTag, routeTag).then(route => route);
 
-const getAgencyTags = () => (
-  api.getAgencies()
-    .then(({ agency }) => (
-      agency.map(({ tag }) => tag)
-    ))
-);
+const getAgencyRouteTags = agencyTag =>
+  api
+    .getRoutesTags(agencyTag)
+    .then(({ route: routes = [] }) => forceArray(routes).map(({ tag }) => tag));
 
-const buildGeoRoutes = (routes) => {
+const getAgencyTags = () =>
+  api.getAgencies().then(({ agency }) => agency.map(({ tag }) => tag));
+
+const buildGeoRoutes = routes => {
   const geoObj = geo.buildFeaturesShell(routes.copyright);
   const routePaths = { type: 'FeatureCollection', features: [] };
-  routes.forEach((route) => {
+  routes.forEach(route => {
     geoObj.features.push(geo.buildRoute(route, routePaths));
   });
   return geoObj;
-}
+};
 
-const buildGeoStops = (stops) => {
-  const geoObj = geo.buildFeaturesShell(stops.copyright)
-  geoObj.features = Object.keys(stops.data).map(stopKey => (
+const buildGeoStops = stops => {
+  const geoObj = geo.buildFeaturesShell(stops.copyright);
+  geoObj.features = Object.keys(stops.data).map(stopKey =>
     geo.buildStopPoint(stops.data[stopKey])
-  ));
+  );
   return geoObj;
-}
+};
 
-const processAgencyRoutes = async (agencyTag) => {
-  createDirectory(`${dir}/${agencyTag}`)
+const processAgencyRoutes = async agencyTag => {
+  createDirectory(`${dir}`);
+  createDirectory(`${dir}/${agencyTag}`);
   const routeTags = await getAgencyRouteTags(agencyTag);
 
-  const routes = await Promise.all(routeTags.map(async (routeTag, idx) => {
-    const route = await getRouteData(agencyTag, routeTag);
+  const routes = await Promise.all(
+    routeTags.map(async (routeTag, idx) => {
+      const route = await getRouteData(agencyTag, routeTag);
 
-    if (routeTags.length - 1 === idx) {
-      console.log(`FINISHED: ${agencyTag}`);
-    }
-    return route;
-  }));
+      if (routeTags.length - 1 === idx) {
+        console.log(`Starting: ${agencyTag}`);
+      }
+      return route;
+    })
+  );
 
-  const minifiedData = routes.reduce((acc, route) => (
-    aggregateData(route, acc.routes, acc.stops)
-  ), { });
+  if (routes.length === 0) {
+    console.log('No routes for:', agencyTag);
+    return;
+  }
+
+  let minifiedData = routes.reduce(
+    (acc, route) => aggregateData(route, acc.routes, acc.stops),
+    {}
+  );
+
   writeJSON(`${dir}/${agencyTag}/stops.json`, minifiedData.stops);
   writeJSON(`${dir}/${agencyTag}/routes.json`, minifiedData.routes);
   writeJSON(`${dir}/${agencyTag}/routesMap.geojson`, buildGeoRoutes(routes));
-  writeJSON(`${dir}/${agencyTag}/stopsMap.geojson`, buildGeoStops(minifiedData.stops));
+  writeJSON(
+    `${dir}/${agencyTag}/stopsMap.geojson`,
+    buildGeoStops(minifiedData.stops)
+  );
+  console.log(new Set(fails));
 };
 
 const getAllRoutes = async () => {
   createDirectory(dir);
   const agencyTags = await getAgencyTags();
-  agencyTags.map((tag, idx) => (
+  agencyTags.map((tag, idx) =>
     setTimeout(() => processAgencyRoutes(tag), 20000 * idx)
-  ));
-}
-
+  );
+};
+ 
 getAllRoutes();
+// processAgencyRoutes('configdev');

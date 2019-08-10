@@ -12,7 +12,7 @@ function addNewStops(routeStops, aggregator) {
   // var duplicateCounter = 0;
   routeStops.forEach(function(stop) {
     if (!aggregator[stop.tag]) {
-      aggregator[stop.tag] = stop;
+      aggregator[stop.tag] = Object.assign({ routes: {} }, stop);
     }
     // else {
     //   duplicateCounter += 1;
@@ -23,28 +23,30 @@ function addNewStops(routeStops, aggregator) {
 }
 
 function getStops(directions) {
-  if(!directions){
+  if (!directions) {
     directions = [];
   } else {
     directions = forceArray(directions);
   }
   var stops = {};
   directions.forEach(function(direction) {
-    var dirStops = forceArray(direction.stop).map(function(stop) { return stop.tag; });
+    var dirStops = forceArray(direction.stop).map(function(stop) {
+      return stop.tag;
+    });
     if (direction.name === 'Outbound') {
-      if(!stops.outbound) {
+      if (!stops.outbound) {
         stops.outbound = dirStops;
         return;
       }
     } else if (direction.name === 'Inbound') {
-      if(!stops.inbound) {
+      if (!stops.inbound) {
         stops.outbound = dirStops;
         return;
       }
     }
-    stops[direction.title.replace(' ', '_')] =  dirStops;
+    stops[direction.title] = dirStops;
   });
-  if(Object.keys(stops).length === 0){
+  if (Object.keys(stops).length === 0) {
     return undefined;
   }
   return stops;
@@ -60,15 +62,22 @@ function addCopyright(routes, stops, copyright) {
 }
 
 function minifyRouteStopData(routeData, routeAggregator, stopAggregator) {
-  if(!routeAggregator) {
+  if (!routeAggregator) {
     routeAggregator = { data: {} };
+  } else {
+    routeAggregator = Object.assign({}, routeAggregator);
   }
-  if(!stopAggregator) {
+  if (!stopAggregator) {
     stopAggregator = { data: {} };
+  } else {
+    stopAggregator = Object.assign({}, stopAggregator);
   }
   addCopyright(routeAggregator, stopAggregator, routeData.copyright);
   try {
-    stopAggregator.data = addNewStops(routeData.route.stop, stopAggregator.data);
+    stopAggregator.data = addNewStops(
+      routeData.route.stop,
+      stopAggregator.data
+    );
     routeAggregator.data[routeData.route.tag] = {
       title: routeData.route.title,
       color: routeData.route.color,
@@ -82,14 +91,14 @@ function minifyRouteStopData(routeData, routeAggregator, stopAggregator) {
       //   inbound: routeSchedule.route[0] ? returnTagValues(routeSchedule.route[0].header.stop) : undefined,
       //   outbound: routeSchedule.route[1] ? returnTagValues(routeSchedule.route[1].header.stop) : undefined
       // },
-      stops: getStops(routeData.route.direction),
+      stops: getStops(routeData.route.direction)
     };
   } catch (err) {
     throw TypeError(err.message); // eslint-disable-line
   }
   return {
     routes: routeAggregator,
-    stops: stopAggregator,
+    stops: stopAggregator
   };
 }
 
