@@ -5,7 +5,7 @@ module.exports = function (entry){
     return [];
   }
   if(!Array.isArray(entry)){
-    entry = [entry];
+    entry = [entry]; 
   }
   return entry;
 };

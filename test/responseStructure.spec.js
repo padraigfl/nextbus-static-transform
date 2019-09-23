@@ -4,6 +4,7 @@
 
 var expect = require('chai').expect;
 var io = require('../utils/jsonIO');
+var forceArray = require('../src/utils/forceArray');
 
 var route = io.readJSON('./test/testFile.json');
 
@@ -49,7 +50,7 @@ describe('checking API response follows expected structure', function() {
       directions = [directions];
     }
     directions.forEach(function(dir){
-      dir.stop.map(function(dirStop) {
+      forceArray(dir.stop).map(function(dirStop) {
         expect(!!dirStop.tag).to.equal(true);
       });
     });
