@@ -88,7 +88,7 @@ function getFirstTime(times) {
 function getRouteScheduleDetails(daySched) {
   const daySchedule = forceArray(daySched);
   const stop = daySchedule[0] ? forceArray(daySchedule[0].stop) : undefined;
-  if (stop.length > 0) {
+  if (Array.isArray(stop) && stop.length > 0) {
     return {
       first: getFirstTime(daySchedule[0].stop),
       last: getFirstTime(daySchedule[daySchedule.length - 1].stop)
