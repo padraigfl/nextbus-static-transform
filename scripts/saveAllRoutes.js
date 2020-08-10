@@ -1,4 +1,4 @@
-const http = require('http');
+const process = require('process')
 const nextBusTools = require('../src/index');
 const forceArray = require('../src/utils/forceArray');
 const writeJSON = require('../utils/jsonIO').writeJSON;
@@ -127,9 +127,3 @@ const getAllRoutes = async () => {
 };
 
 getAllRoutes();
-
-// lazy way to keep the thing running...
-http.createServer(function (req, res) {
-  res.write('Hello World!');
-  res.end();
-}).listen(8080);
