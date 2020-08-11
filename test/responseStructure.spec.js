@@ -4,6 +4,7 @@
 
 var expect = require('chai').expect;
 var io = require('../utils/jsonIO');
+var forceArray = require('../src/utils/forceArray');
 
 var route = io.readJSON('./test/testFile.json');
 

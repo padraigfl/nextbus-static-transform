@@ -1,3 +1,4 @@
+const process = require('process')
 const nextBusTools = require('../src/index');
 const forceArray = require('../src/utils/forceArray');
 const writeJSON = require('../utils/jsonIO').writeJSON;
@@ -9,6 +10,8 @@ const geo = nextBusTools.geo;
 const dir = './routes';
 
 const fails = [];
+
+const routeIssues = [];
 
 const getRouteData = (agencyTag, routeTag) =>
   api.getRoute(agencyTag, routeTag).then(route => route);
@@ -43,18 +46,26 @@ const processAgencyRoutes = async agencyTag => {
   createDirectory(`${dir}/${agencyTag}`);
   const routeTags = await getAgencyRouteTags(agencyTag);
 
-  const routes = await Promise.all(
-    routeTags.map(async (routeTag, idx) => {
-      const route = await getRouteData(agencyTag, routeTag);
+  let routes = [];
 
-      if (routeTags.length - 1 === idx) {
-        console.log(`Starting: ${agencyTag}`);
-      }
-      return route;
-    })
-  );
+  if (routeTags.length > 200) {
+    for(let j = 0; j < routeTags.length; j++) {
+      const time = new Date().getTime();
+      const route = await getRouteData(agencyTag, routeTags[j]);
+      routes.push(route);
+    }
+  } else if (routeTags.length > 0) {
+    routes = await Promise.all(
+      routeTags.map(async (routeTag, idx) => {
+        const route = await getRouteData(agencyTag, routeTag);
 
-  if (routes.length === 0) {
+        if (routeTags.length - 1 === idx) {
+          console.log(`Starting route req: ${agencyTag}`);
+        }
+        return route;
+      })
+    );
+  } else {
     console.log('No routes for:', agencyTag);
     return;
   }
@@ -64,6 +75,33 @@ const processAgencyRoutes = async agencyTag => {
     {}
   );
 
+  for (let i = 0; i < routeTags.length; i++) {
+    const time = new Date().getTime();
+    const desc = routeTags.length + ',' + agencyTag + ',' + routeTags[i];
+    let x;
+    while (time + 200 > new Date().getTime()) {}
+    console.log('req:' + i + '/' + desc);
+    const sched = await api
+      .getRouteSchedule(agencyTag, routeTags[i])
+      .then((data) => {
+        console.log('res:' + i.toString().padStart(3, ' ') + '/' + desc);
+        x = aggregateData.addScheduleData(
+          routeTags[i],
+          data,
+          minifiedData.routes,
+          minifiedData.stops
+        );
+      })
+      .catch(e => {
+        console.log(e);
+        console.log('fail' + i.toString().padStart(3, ' ') + '/' + desc );
+        routeIssues.push(`${agencyTag}-${routeTags[i]}`);
+      });
+    if (x) {
+      minifiedData = x;
+    }
+  }
+
   writeJSON(`${dir}/${agencyTag}/stops.json`, minifiedData.stops);
   writeJSON(`${dir}/${agencyTag}/routes.json`, minifiedData.routes);
   writeJSON(`${dir}/${agencyTag}/routesMap.geojson`, buildGeoRoutes(routes));
@@ -72,15 +110,20 @@ const processAgencyRoutes = async agencyTag => {
     buildGeoStops(minifiedData.stops)
   );
   console.log(new Set(fails));
+  console.log(new Set(routeIssues));
+  console.log(new Set(routeIssues).size);
+  console.log('success?');
+  return;
 };
 
 const getAllRoutes = async () => {
   createDirectory(dir);
   const agencyTags = await getAgencyTags();
-  agencyTags.map((tag, idx) =>
-    setTimeout(() => processAgencyRoutes(tag), 20000 * idx)
-  );
+  for (let i = 0; i < agencyTags.length; i++) {
+    await processAgencyRoutes(agencyTags[i]);
+  }
+  // need to timeout end to allow writing of files to complete
+  setTimeout(process.exit, 1000);
 };
- 
+
 getAllRoutes();
-// processAgencyRoutes('configdev');
