@@ -33,7 +33,7 @@
     "nyc": "^11.6.0",
     "pre-commit": "^1.2.2",
     "webpack": "^4.5.0",
-    "webpack-cli": "^2.0.14"
+    "webpack-cli": "^5.0.1"
   },
   "precommit": [
     "test:setup",
